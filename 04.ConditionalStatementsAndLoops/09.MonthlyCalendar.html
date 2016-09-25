@@ -30,29 +30,67 @@
             width: 100%;
         }
     </style>
-    <script>
-        function calendar(input) {
-            let [day, month, year] = input.map(Number);
+</head>
 
-            let currentMonthStart = new Date(year, month - 1, 1);
-            let currentMonthEnd = new Date(year, month, 1);
-            currentMonthEnd = new Date(currentMonthEnd - 3600);
-            let prevMonthEnd = new Date(currentMonthStart - 3600);
+<body>
+<form action="#">
+    Day: <label for="day">Day: </label><input id="day" type="number" value="4"/>
+    Month: <label for="month">Month: </label><input id="month" type="number" value="9"/>
+    Year: <label for="year">Year: </label><input id="year" type="number" value="2016"/>
+    <input type="button" value="Show"
+           onclick="let calendarHTML =
+            calendar([document.getElementById('day').value,
+                document.getElementById('month').value,
+                document.getElementById('year').value]);
+            document.getElementById('calendar').innerHTML = calendarHTML;
+            document.getElementById('calendarCode').innerText = calendarHTML"/>
+    <div class="title">Calendar:</div>
+    <div id="calendar">Calendar will be shown here</div>
+    <div class="title">HTML:</div>
+    <label for="calendarCode">View source code: </label><textarea rows="12" id="calendarCode"></textarea>
+</form>
+<script>
+    function calendar(input) {
+        let [day, month, year] = input.map(Number);
 
-            let currentMonthStartDay = currentMonthStart.getDay() % 7;
-            let currentMonthEndDay = currentMonthEnd.getDay();
+        let currentMonthStart = new Date(year, month - 1, 1);
+        let currentMonthEnd = new Date(year, month, 1);
+        currentMonthEnd = new Date(currentMonthEnd - 3600);
+        let prevMonthEnd = new Date(currentMonthStart - 3600);
 
-            let html = '<table>\n';
-            html += '  <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>\n';
-            let dayA = currentMonthStart.getDate();
-            let dayZ = currentMonthEnd.getDate();
-            if (currentMonthStart != 0 && firstWeek) {
-                html += '  <tr>';
-                for (let i = prevMonthEnd.getDate() - currentMonthStartDay + 1, j = currentMonthStartDay; j > 0; i++, j--) {
-                    html += `<td class="prev-month">${i}</td>`;
+        let currentMonthStartDay = currentMonthStart.getDay() % 7;
+
+        let html = '<table>\n';
+        html += '  <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>\n';
+        let dayA = currentMonthStart.getDate();
+        let dayZ = currentMonthEnd.getDate();
+        if (currentMonthStart != 0) {
+            html += '  <tr>';
+            for (let i = prevMonthEnd.getDate() - currentMonthStartDay + 1, j = currentMonthStartDay; j > 0; i++, j--) {
+                html += `<td class="prev-month">${i}</td>`;
+            }
+
+            for (let dayIndex = currentMonthStartDay; dayIndex < 7; dayIndex++) {
+                if (dayA == day) {
+                    html += `<td class="today">${dayA}</td>`;
+                    dayA++;
+                } else {
+                    html += `<td>${dayA}</td>`;
+                    dayA++;
                 }
+            }
 
-                for (let dayIndex = currentMonthStartDay; dayIndex < 7; dayIndex++) {
+            html += '</tr>\n';
+        }
+
+        let nextMonth = 1;
+        while (dayA <= dayZ) {
+            html += '  <tr>';
+            for (let i = 0; i < 7; i++) {
+                if (dayA > dayZ) {
+                    html += `<td class="next-month">${nextMonth}</td>`;
+                    nextMonth++;
+                } else {
                     if (dayA == day) {
                         html += `<td class="today">${dayA}</td>`;
                         dayA++;
@@ -61,54 +99,15 @@
                         dayA++;
                     }
                 }
-
-                html += '</tr>\n';
             }
 
-            let nextMonth = 1;
-            while (dayA <= dayZ) {
-                html += '  <tr>';
-                for (let i = 0; i < 7; i++) {
-                    if (dayA > dayZ) {
-                        html += `<td class="next-month">${nextMonth}</td>`;
-                        nextMonth++;
-                    } else {
-                        if (dayA == day) {
-                            html += `<td class="today">${dayA}</td>`;
-                            dayA++;
-                        } else {
-                            html += `<td>${dayA}</td>`;
-                            dayA++;
-                        }
-                    }
-                }
-
-                html += '</tr>\n';
-            }
-
-            html += '</table>';
-
-            return html;
+            html += '</tr>\n';
         }
 
-        console.log(calendar([2016, 8, 23]));
-    </script>
-</head>
+        html += '</table>';
 
-<body>
-Day: <input id="day" type="number" value="4"/>
-Month: <input id="month" type="number" value="9"/>
-Year: <input id="year" type="number" value="2016"/>
-<input type="button" value="Show"
-       onclick="let calendarHTML =
-            calendar([document.getElementById('day').value,
-                document.getElementById('month').value,
-                document.getElementById('year').value]);
-            document.getElementById('calendar').innerHTML = calendarHTML;
-            document.getElementById('calendarCode').innerText = calendarHTML"/>
-<div class="title">Calendar:</div>
-<div id="calendar">Calendar will be shown here</div>
-<div class="title">HTML:</div>
-<textarea rows="12" id="calendarCode"></textarea>
+        return html;
+    }
+</script>
 </body>
 </html>

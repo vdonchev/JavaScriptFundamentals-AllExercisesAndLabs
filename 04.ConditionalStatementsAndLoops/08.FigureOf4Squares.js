@@ -21,6 +21,10 @@ function generateFigure([size]) {
         }
 
         output += majorLine;
+
+        if (size == 2) {
+            return majorLine;
+        }
     } else {
         let totalRows = size;
         let totalCols = size * 2 - 1;
@@ -45,4 +49,4 @@ function generateFigure([size]) {
     return output;
 }
 
-console.log(generateFigure(['7']));
+console.log(generateFigure(['2']));

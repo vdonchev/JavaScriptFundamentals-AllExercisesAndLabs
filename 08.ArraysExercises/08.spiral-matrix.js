@@ -1,16 +1,10 @@
-function generateSpiralMatrix(input) {
-    [rows, cols] = input.map(Number);
+function generateSpiralMatrix([input]) {
+    [rows, cols] = input.split(' ').map(Number);
 
     let matrix = [];
     for (let i = 0; i < rows; i++) {
         matrix.push('0'.repeat(cols).split('').map(Number));
     }
-    // for (let row = 0; row < rows; row++) {
-    //     matrix[row] = [];
-    //     for (let col = 0; col < cols; col++) {
-    //         matrix[row][col] = 0;
-    //     }
-    // }
 
     let top = 0;
     let bottom = rows - 1;
@@ -52,9 +46,8 @@ function generateSpiralMatrix(input) {
         }
     }
 
-    for (let row of matrix) {
-        console.log(row.join(' '));
-    }
+    let printMatrix = matrx => console.log(matrx.map(r => r.join(" ")).join('\n'));
+    printMatrix(matrix);
 }
 
-generateSpiralMatrix(['5', '5']);
+generateSpiralMatrix(['5 5']);
